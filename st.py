@@ -12,8 +12,8 @@ from crewai import Agent, Task, Crew, Process
 
 # Initialize Deepseek
 llm = ChatDeepSeek(
-    deepseek_api_key=st.secrets["DEEPSEEK_API_KEY"],  # Store this in Streamlit secrets
-    model_name="deepseek-chat"  # or another appropriate Deepseek model
+    api_key=st.secrets["DEEPSEEK_API_KEY"],  # Store this in Streamlit secrets
+    model="deepseek-chat"  # or another appropriate Deepseek model
 )
 
 # Configuração da página
