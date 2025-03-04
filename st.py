@@ -10,9 +10,13 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from crewai import Agent, Task, Crew, Process
 
+from pydantic import (
+    SecretStr
+)
+
 # Initialize Deepseek
 llm = ChatDeepSeek(
-    api_key=st.secrets["DEEPSEEK_API_KEY"],  # Store this in Streamlit secrets
+    api_key= SecretStr(st.secrets["DEEPSEEK_API_KEY"]),  # Store this in Streamlit secrets
     model="deepseek-chat"  # or another appropriate Deepseek model
 )
 
