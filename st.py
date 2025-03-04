@@ -5,15 +5,16 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import streamlit as st
 import os
 from langchain_community.document_loaders import YoutubeLoader
-from langchain_ollama.chat_models import ChatOllama
+from langchain_community.llms import Deepseek
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from crewai import Agent, Task, Crew, Process
 
-
-                                         
-os.environ["OPENAI_API_KEY"] = "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"
-os.environ["OPENAI_MODEL_NAME"] = 'gpt-4o-mini'
+# Initialize Deepseek
+llm = Deepseek(
+    deepseek_api_key=st.secrets["DEEPSEEK_API_KEY"],  # Store this in Streamlit secrets
+    model_name="deepseek-chat"  # or another appropriate Deepseek model
+)
 
 # Configuração da página
 st.set_page_config(
@@ -54,6 +55,7 @@ if st.button("Processar Vídeo"):
                 researcher = Agent(
                     role="Professor",
                     goal="Criar perguntas e respostas",
+                    llm=llm,  # Use the Deepseek LLM
                     verbose=True,
                     backstory=(
                         "Como professor, eu devo:"
