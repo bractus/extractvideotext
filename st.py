@@ -1,3 +1,7 @@
+import pysqlite3 
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 import streamlit as st
 import os
 from langchain_community.document_loaders import YoutubeLoader
@@ -6,9 +10,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from crewai import Agent, Task, Crew, Process
 
-import pysqlite3 
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
                                          
 os.environ["OPENAI_API_KEY"] = "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"
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-4o-mini'
