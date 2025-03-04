@@ -35,7 +35,7 @@ languages = {
     "Italiano": "italiano",
     "Português": "português"
 }
-selected_language = st.selectbox("Escolha o idioma para as perguntas e respostas:", list(languages.keys()), index=-1)
+selected_language = st.selectbox("Escolha o idioma para as perguntas e respostas:", list(languages.keys()), index=5)
 
 # Botão de processamento
 if st.button("Processar Vídeo"):
