@@ -5,3 +5,4 @@ langchain-ollama>=0.0.3
 crewai>=0.16.2
 youtube-dl>=2021.12.17
 pytube>=15.0.0 
+sqlite3 >= 3.35.0
