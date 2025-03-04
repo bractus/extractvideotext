@@ -7,3 +7,5 @@ youtube-dl>=2021.12.17
 pytube>=15.0.0 
 pysqlite3-binary 
 youtube-transcript-api>=0.4.0
+transformers
+langchain
