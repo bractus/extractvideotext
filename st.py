@@ -6,7 +6,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from crewai import Agent, Task, Crew, Process
 
-import('pysqlite3')
+import pysqlite3 
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
                                          
