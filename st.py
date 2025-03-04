@@ -12,7 +12,7 @@ from crewai import Agent, Task, Crew, Process
 
 
                                          
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-4o-mini'
 
 # Configuração da página
