@@ -5,13 +5,13 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import streamlit as st
 import os
 from langchain_community.document_loaders import YoutubeLoader
-from langchain_community.llms import Deepseek
+from langchain_deepseek import ChatDeepSeek
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from crewai import Agent, Task, Crew, Process
 
 # Initialize Deepseek
-llm = Deepseek(
+llm = ChatDeepSeek(
     deepseek_api_key=st.secrets["DEEPSEEK_API_KEY"],  # Store this in Streamlit secrets
     model_name="deepseek-chat"  # or another appropriate Deepseek model
 )
