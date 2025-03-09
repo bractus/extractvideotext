@@ -4,11 +4,13 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import streamlit as st
 import os
+import re
 from langchain_community.document_loaders import YoutubeLoader
 from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from crewai import Agent, Task, Crew, Process
+from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
 
 # Initialize Claude Sonnet
 llm = ChatAnthropic(
@@ -48,11 +50,47 @@ if st.button("Processar Vídeo"):
     if youtube_url:
         try:
             with st.spinner("Processando o vídeo..."):
-                # Carregar o vídeo
-                video_loader = YoutubeLoader.from_youtube_url(youtube_url, language=["pt"])
-                infos = video_loader.load()
-                transcricao = infos[0].page_content
-
+                # Extract video ID from URL
+                video_id_match = re.search(r'(?:v=|\/)([0-9A-Za-z_-]{11}).*', youtube_url)
+                if not video_id_match:
+                    st.error("URL do YouTube inválida. Por favor, verifique o link e tente novamente.")
+                    st.stop()
+                
+                video_id = video_id_match.group(1)
+                
+                # Try to get transcript using langchain's YoutubeLoader
+                try:
+                    video_loader = YoutubeLoader.from_youtube_url(youtube_url, language=["pt"])
+                    infos = video_loader.load()
+                    
+                    if not infos:
+                        raise IndexError("Não foi possível carregar a transcrição com o YoutubeLoader")
+                    
+                    transcricao = infos[0].page_content
+                    
+                except (IndexError, Exception) as e:
+                    st.info("Usando método alternativo para obter a transcrição...")
+                    
+                    # Fallback: Use youtube_transcript_api directly
+                    try:
+                        transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=['pt', 'en'])
+                        transcricao = " ".join([item['text'] for item in transcript_list])
+                        
+                        if not transcricao:
+                            st.error("Não foi possível extrair a transcrição do vídeo.")
+                            st.stop()
+                            
+                    except (TranscriptsDisabled, NoTranscriptFound) as e:
+                        st.error(f"Este vídeo não possui legendas disponíveis: {str(e)}")
+                        st.stop()
+                    except Exception as e:
+                        st.error(f"Erro ao obter a transcrição: {str(e)}")
+                        st.stop()
+                
+                # Display a preview of the transcript
+                st.subheader("Prévia da Transcrição:")
+                st.write(transcricao[:500] + "..." if len(transcricao) > 500 else transcricao)
+                
                 # Configurar o agente
                 researcher = Agent(
                     role="Professor",
