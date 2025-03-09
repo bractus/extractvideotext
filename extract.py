@@ -2,7 +2,7 @@ import os
 import io
 import re
 from langchain_community.document_loaders import YoutubeLoader
-from langchain_anthropic import ChatAnthropic
+from langchain_community.chat_models import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
@@ -55,17 +55,17 @@ print(transcricao[:500] + "..." if len(transcricao) > 500 else transcricao)
 
 language = "alemão"
 
-# Initialize Claude Sonnet
-llm = ChatAnthropic(
-    anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY", "your-api-key-here"),
-    model="claude-3-sonnet-20240229"
+# Initialize Grok model via Groq API
+llm = ChatGroq(
+    groq_api_key=os.environ.get("GROQ_API_KEY", "your-api-key-here"),
+    model_name="llama3-70b-8192"  # This is Groq's implementation of Llama 3, similar to Grok
 )
 
 # Agent 1: Researcher
 researcher = Agent(
     role="Professor",
     goal="Criar perguntas e respostas",
-    llm=llm,  # Use Claude Sonnet
+    llm=llm,  # Use Grok
     verbose=True,
     backstory=(
         "Como professor, eu devo:"
