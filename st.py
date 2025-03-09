@@ -5,10 +5,16 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import streamlit as st
 import os
 from langchain_community.document_loaders import YoutubeLoader
-from langchain_ollama.chat_models import ChatOllama
+from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from crewai import Agent, Task, Crew, Process
+
+# Initialize Claude Sonnet
+llm = ChatAnthropic(
+    anthropic_api_key=st.secrets.get("ANTHROPIC_API_KEY", "your-api-key-here"),
+    model="claude-3-sonnet-20240229"
+)
 
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-4o-mini'
 
@@ -51,6 +57,7 @@ if st.button("Processar Vídeo"):
                 researcher = Agent(
                     role="Professor",
                     goal="Criar perguntas e respostas",
+                    llm=llm,  # Use Claude Sonnet
                     verbose=True,
                     backstory=(
                         "Como professor, eu devo:"
