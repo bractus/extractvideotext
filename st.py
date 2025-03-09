@@ -93,7 +93,15 @@ if st.button("Processar Vídeo"):
                 researcher = Agent(
                     role="Professor",
                     goal="Criar perguntas e respostas",
-                    llm=llm,  # Use Grok
+                    # Use the direct model name format required by litellm
+                    llm_config={
+                        "config_list": [
+                            {
+                                "model": "groq/llama3-70b-8192",
+                                "api_key": st.secrets.get("GROQ_API_KEY", "your-api-key-here")
+                            }
+                        ]
+                    },
                     verbose=True,
                     backstory=(
                         "Como professor, eu devo:"
