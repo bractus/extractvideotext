@@ -6,7 +6,7 @@ import streamlit as st
 import os
 import re
 from langchain_community.document_loaders import YoutubeLoader
-from langchain_community.chat_models import ChatGroq
+from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from crewai import Agent, Task, Crew, Process
@@ -14,7 +14,7 @@ from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, No
 
 # Initialize Grok model via Groq API
 llm = ChatGroq(
-    groq_api_key=st.secrets.get("GROQ_API_KEY", "your-api-key-here"),
+    api_key=st.secrets.get("GROQ_API_KEY", "your-api-key-here"),
     model_name="llama3-70b-8192"  # This is Groq's implementation of Llama 3, similar to Grok
 )
 
